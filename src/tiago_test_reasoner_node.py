@@ -15,7 +15,9 @@ from rosprolog_client import * # PrologException, Prolog
 if __name__ == "__main__":
     try:
         rospy.init_node("tiago_test_reasoner")
-        rospy.spin()
+        # rospy.spin()
+
+        # TODO problem if not waiting for rosprolog service running
         prolog = Prolog()  # start communication with rosprolog
 
         # create skill clients
@@ -38,10 +40,13 @@ if __name__ == "__main__":
         # move_base_client.wait_for_result()
         # rospy.loginfo('Navigation finished')
 
-        query = prolog.query("register_ros_package(knowrob_tiago_dual)") # uncomment to register package
-        prolog.query('tripledb_forget(_,_,_).') # clean DB before starting
+        # prolog.query("register_ros_package(knowrob_tiago_dual)") # TODO does not see to work, ontologies in __init__.pl not loaded
+        ## alternative to register package above: manual load of ontologies
+        prolog.query("tripledb_load('/home/parallels/krr_course_ws/src/knowrob_tiago_dual/owl/tiago_dual.owl')") 
+        prolog.query("tripledb_load('/home/parallels/krr_course_ws/src/knowrob_tiago_dual/owl/objects.owl')")
         
-        # make queries
+        ## make queries
+        # Robot Capabilities and Components 
         query = prolog.query("triple(R, 'http://www.w3.org/2002/07/owl#onProperty', 'http://knowrob.org/kb/srdl2-cap.owl#hasCapability'), \
                    triple(R, 'http://www.w3.org/2002/07/owl#someValuesFrom', Cap), \
                    subclass_of(Cap, Desc), \
@@ -49,11 +54,27 @@ if __name__ == "__main__":
                    triple(Desc, 'http://www.w3.org/2002/07/owl#someValuesFrom', Comp), \
                    triple(CompInst, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type', Comp)")
 
+        print("\nRobot Capabilities:")
         for solution in query.solutions():
             print("Robot: "+ solution["R"])
             print("Capability: "+solution["Cap"])
             print("Component: "+solution["Comp"])
 
+        # Scene objects
+        print("\nScene Objects:")
+        query = prolog.query("triple(X, knowrob:'describedInMap', M).")
+        for solution in query.solutions():
+            print("object: "+ solution["X"] + "\n\t IN SemanticEnvironmentMap: \n\t\t"+ solution["M"])
+
+        # TODO the following query does not retrieve any individuals, WHY?
+        query = prolog.query("has_type(X, soma:'BoxShape').")
+        for solution in query.solutions():
+            print("BoxShape: "+ solution["X"])
+
+        # Forget all triplets before finishing
+        prolog.query('tripledb_forget(_,_,_).') # clean DB before starting
+
 
     except rospy.ROSInterruptException:
+        print("Exception raised")
         pass

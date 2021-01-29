@@ -71,8 +71,8 @@ if __name__ == "__main__":
         for solution in query.solutions():
             print("BoxShape: "+ solution["X"])
 
-        # Forget all triplets before finishing
-        prolog.query('tripledb_forget(_,_,_).') # clean DB before starting
+        # Forget all triplets before finishing TODO: check a better method, this causes problems
+        # prolog.query('tripledb_forget(_,_,_).') # clean DB before starting
 
 
     except rospy.ROSInterruptException:

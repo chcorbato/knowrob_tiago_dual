@@ -7,3 +7,8 @@
         'package://knowrob_tiago_dual/owl/tiago_dual.owl',
         [ namespace(test)
         ]).
+
+:- tripledb_load(
+        'package://knowrob_tiago_dual/owl/objects.owl',
+        [ namespace(test)
+        ]).

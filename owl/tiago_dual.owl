@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY swrl "http://www.w3.org/2003/11/swrl#" >
+    <!ENTITY soma "http://www.ease-crc.org/ont/SOMA.owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY knowrob "http://knowrob.org/kb/knowrob.owl#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY srdl2-comp "http://knowrob.org/kb/srdl2-comp.owl#" >
+    <!ENTITY srdl2-cap "http://knowrob.org/kb/srdl2-cap.owl#" >
+    <!ENTITY robot "http://tiago_dual.owl#" > <!--modified for tiago_dual-->
+]>
+
+<rdf:RDF xml:base="http://tiago_dual.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:knowrob="http://knowrob.org/kb/knowrob.owl#"
+     xmlns:SOMA="http://www.ease-crc.org/ont/SOMA.owl#"
+     xmlns:srdl2-comp="http://knowrob.org/kb/srdl2-comp.owl#"
+     xmlns:srdl2-cap="http://knowrob.org/kb/srdl2-cap.owl#"
+     xmlns:robot="http://tiago_dual.owl#"> <!--modified for tiago_dual-->
+
+    <!-- =========================================== -->
+    <!-- |   Ontology Imports                      | -->
+    <!-- =========================================== -->
+    <owl:Ontology rdf:about="http://tiago_dual.owl"> <!--modified for tiago_dual-->
+        <owl:imports rdf:resource="package://knowrob/owl/srdl2-comp.owl"/>
+        <owl:imports rdf:resource="package://knowrob/owl/srdl2-cap.owl"/>
+    </owl:Ontology>
+
+     <!-- =========================================== -->
+    <!-- |   SRDL2 Robot Capabilities              | -->
+    <!-- =========================================== -->
+    <owl:Class rdf:about="&robot;tiago_dual_robot">
+        <rdfs:subClassOf rdf:resource="&knowrob;Robot"/>
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <!--{driver node or ROS control} (static and runtime, defined in manipulation_capability.rossystem)
+                            and move group in SRDF / URDF-->
+                        <!--basically any arm that has a follow_joint_trajectory_interface-->
+                        <owl:onProperty rdf:resource="&srdl2-cap;hasCapability"/>
+                        <!--this capability provided by 'panda_arm' defined in SRDF; how to describe that?-->
+                        <owl:someValuesFrom rdf:resource="&srdl2-cap;ArmMotionCapability"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <!--endeffector in SRDF, service / action for the gripper (static and runtime)-->
+                        <owl:onProperty rdf:resource="&srdl2-cap;hasCapability"/>
+                        <!--this capability provided by 'hand' defined in SRDF; how to describe that?-->
+                        <owl:someValuesFrom rdf:resource="&srdl2-cap;GripperMotionCapability"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+    </owl:Class>   
+
+    <!-- =========================================== -->
+    <!-- |   Robot Instance                        | -->
+    <!-- =========================================== -->
+
+    <!--Static time only? From SRDF-->
+    <owl:NamedIndividual rdf:about="&robot;tiago_dual_robot1">
+        <rdf:type rdf:resource="&robot;tiago_dual_robot"/>
+        <!--how to associate these sub-components with its corresponding capabilities-->
+        <srdl2-comp:subComponent rdf:resource="&robot;tiago_arm_right"/>
+        <srdl2-comp:subComponent rdf:resource="&robot;hand"/>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="&robot;tiago_arm_right">
+        <rdf:type rdf:resource="&srdl2-comp;ComponentComposition"/>
+        <!--move_group: TODO complete-->
+        <rdf:type rdf:resource="&knowrob;Arm"/>
+        <srdl2-comp:baseLinkOfComposition rdf:resource="&robot;arm_right_1_link"/>
+        <srdl2-comp:endLinkOfComposition rdf:resource="&robot;wrist_right_ft_tool_link"/>
+    </owl:NamedIndividual>
+
+    <!--ROSIN project ROS End-effectors is trying to standardize interfaces-->
+    <owl:NamedIndividual rdf:about="&robot;hand_right">
+        <rdf:type rdf:resource="&srdl2-comp;ComponentComposition"/>
+        <rdf:type rdf:resource="&knowrob;PrehensileEffector"/>
+        <srdl2-comp:baseLinkOfComposition rdf:resource="&robot;gripper_right_link"/>
+    </owl:NamedIndividual>
+
+    <owl:Class rdf:about="&srdl2-cap;ArmMotionCapability">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&srdl2-comp;dependsOnComponent"/>
+                <owl:someValuesFrom rdf:resource="&knowrob;Arm"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+
+    <owl:Class rdf:about="&srdl2-cap;GripperMotionCapability">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&srdl2-comp;dependsOnComponent"/>
+                <owl:someValuesFrom rdf:resource="&knowrob;PrehensileEffector"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+
+</rdf:RDF>

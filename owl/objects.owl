@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY swrl "http://www.w3.org/2003/11/swrl#" >
+    <!ENTITY soma "http://www.ease-crc.org/ont/SOMA.owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY knowrob "http://knowrob.org/kb/knowrob.owl#" >
+    <!ENTITY knowrob_paramserver "http://knowrob.org/kb/knowrob_paramserver.owl#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY srdl2-comp "http://knowrob.org/kb/srdl2-comp.owl#" >
+    <!ENTITY object_test "http://knowrob.org/kb/object_test.owl#" >
+]>
+
+
+<rdf:RDF xml:base="http://knowrob.org/kb/object_test.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:knowrob="http://knowrob.org/kb/knowrob.owl#"
+     xmlns:SOMA="http://www.ease-crc.org/ont/SOMA.owl#"
+     xmlns:srdl2-comp="http://knowrob.org/kb/srdl2-comp.owl#"
+     xmlns:knowrob_paramserver="http://knowrob.org/kb/knowrob_paramserver.owl#"
+     xmlns:object_test="http://knowrob.org/kb/object_test.owl#">
+
+    <owl:Ontology rdf:about="http://knowrob.org/kb/object_test.owl">
+        <owl:imports rdf:resource="package://knowrob/owl/knowrob.owl"/>
+    </owl:Ontology>
+
+    <!-- SemanticEnvironmentMap -->
+    <owl:NamedIndividual rdf:about="&object_test;WorkcellMap">
+        <rdf:type rdf:resource="&knowrob;SemanticEnvironmentMap"/>
+    </owl:NamedIndividual>
+
+    <owl:Class rdf:about="&object_test;Product">
+        <rdfs:subClassOf rdf:resource="&soma;BoxShape"/>
+        <rdfs:subClassOf rdf:resource="&knowrob;SpatialThing-Localized"/>
+    </owl:Class>
+
+    <owl:NamedIndividual rdf:about="&object_test;TablePick"> <!-- TODO -->
+        <knowrob:describedInMap rdf:resource="&object_test;WorkcellMap"/>
+        <knowrob:widthOfObject rdf:datatype="&xsd;float">0.4</knowrob:widthOfObject> <!--X-->
+        <knowrob:depthOfObject rdf:datatype="&xsd;float">0.4</knowrob:depthOfObject> <!--Y-->
+        <knowrob:heightOfObject rdf:datatype="&xsd;float">0.4</knowrob:heightOfObject> <!--Z-->
+        <srdl2-comp:color_rgba rdf:datatype="&xsd;string">0 0 0.7 1</srdl2-comp:color_rgba>
+        <knowrob:urdfName rdf:datatype="&xsd;string">table_frame</knowrob:urdfName>
+        <rdfs:label rdf:datatype="&xsd;string">pick_table</rdfs:label>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="&object_test;hagelslag_small">
+        <rdf:type rdf:resource="&object_test;Product"/>
+        <knowrob:describedInMap rdf:resource="&object_test;WorkcellMap"/>
+        <knowrob:widthOfObject rdf:datatype="&xsd;float">0.02</knowrob:widthOfObject> <!--X-->
+        <knowrob:depthOfObject rdf:datatype="&xsd;float">0.02</knowrob:depthOfObject> <!--Y-->
+        <knowrob:heightOfObject rdf:datatype="&xsd;float">0.2</knowrob:heightOfObject> <!--Z-->
+        <!-- <srdl2-comp:color_rgba rdf:datatype="&xsd;string">0 0 0.7 1</srdl2-comp:color_rgba> -->
+        <knowrob:urdfName rdf:datatype="&xsd;string">obj_01_frame</knowrob:urdfName>
+        <rdfs:label rdf:datatype="&xsd;string">product_01</rdfs:label>
+    </owl:NamedIndividual>
+
+    
+</rdf:RDF>
+
+

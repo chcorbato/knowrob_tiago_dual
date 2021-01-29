@@ -35,7 +35,7 @@
         <rdf:type rdf:resource="&knowrob;SemanticEnvironmentMap"/>
     </owl:NamedIndividual>
 
-    <owl:Class rdf:about="&object_test;Product">
+    <owl:Class rdf:about="&object_test;WorkPiece">
         <rdfs:subClassOf rdf:resource="&soma;BoxShape"/>
         <rdfs:subClassOf rdf:resource="&knowrob;SpatialThing-Localized"/>
     </owl:Class>
@@ -51,7 +51,7 @@
     </owl:NamedIndividual>
 
     <owl:NamedIndividual rdf:about="&object_test;hagelslag_small">
-        <rdf:type rdf:resource="&object_test;Product"/>
+        <rdf:type rdf:resource="&object_test;WorkPiece"/>
         <knowrob:describedInMap rdf:resource="&object_test;WorkcellMap"/>
         <knowrob:widthOfObject rdf:datatype="&xsd;float">0.02</knowrob:widthOfObject> <!--X-->
         <knowrob:depthOfObject rdf:datatype="&xsd;float">0.02</knowrob:depthOfObject> <!--Y-->
